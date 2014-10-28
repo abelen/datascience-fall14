@@ -1,0 +1,37 @@
+create or replace function xmlGenerate() returns text as $$
+declare
+	record_val record;
+	array_len integer;
+	str text;
+	str_query record;
+begin
+	str := '';
+	/* loop thru the query results */
+	
+	for record_val in select events.name as event_name, array_agg(players.name) as players from results inner join events on results.event_id = events.event_id inner join players on results.player_id = players.player_id and players.country_id = 'USA' and results.medal = 'GOLD' and events.olympic_id = 'ATH2004' group by 1 LOOP
+
+	/* get the event information */
+	select concat(str, '<medal>') as str into str_query;
+	str := str_query.str;
+	select concat(str, '<event>', record_val.event_name, '</event>') as str into str_query;
+	str := str_query.str;
+	select array_length(record_val.players, 1) into array_len;
+	if array_len = 1 then
+		select concat(str, '<player>', record_val.players[1], '</player>') as str into str_query;
+		str := str_query.str;
+	else
+		select concat(str, '<players>') as str into str_query;
+		str := str_query.str;
+		for i in 1..array_len loop
+			select concat(str, '<player>', record_val.players[i], '</player>') as str into str_query;
+			str := str_query.str;
+		end loop;
+		select concat(str, '</players>') as str into str_query;
+		str := str_query.str;
+	end if;
+	select concat(str, '</medal>') as str into str_query;
+	str := str_query.str;
+	end loop;
+	return str;
+end;
+$$ language 'plpgsql';

@@ -1,0 +1,20 @@
+import avro
+import avro.schema
+import pandas as pd
+from avro.io import DatumReader, DatumWriter
+from avro.datafile import DataFileReader
+
+schema = avro.schema.parse(open("country.avsc").read())
+
+reader = DataFileReader(open("countries.avro", "r"), DatumReader());
+
+records = []
+
+for u in reader:
+    records.append(u)
+
+print len(records)
+df = pd.DataFrame.from_records(records)
+print df.head(20)
+
+reader.close()

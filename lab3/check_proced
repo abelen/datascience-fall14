@@ -1,0 +1,4 @@
+create or replace function check_update(event_id char, player_id char, medal char, result real) returns VOID $$
+	begin
+	event_type%TYPE;
+	end;

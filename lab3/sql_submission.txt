@@ -1,0 +1,168 @@
+Anthony Belen
+CMSC498O Lab #3
+SQL Assignment Submission
+
+=== 1
+create view NumberOfMedals as
+select c.name, count(r.medal)
+from results r inner join players p 
+on r.player_id = p.player_id
+inner join countries c on
+c.country_id = p.country_id
+group by c.name      
+;
+postgres=# \d+ numberofmedals 
+
+**************** RESULT ***************************************************************
+CREATE VIEW
+                View "public.numberofmedals"
+ Column |     Type      | Modifiers | Storage  | Description 
+--------+---------------+-----------+----------+-------------
+ name   | character(40) |           | extended | 
+ count  | bigint        |           | plain    | 
+View definition:
+ SELECT c.name,
+    count(r.medal) AS count
+   FROM results r
+     JOIN players p ON r.player_id = p.player_id
+     JOIN countries c ON c.country_id = p.country_id
+  GROUP BY c.name;
+=============================================================================================
+
+=== 2
+select * from r left outer join s on 
+r.c = s.c;
+
+**************** RESULT ***************************************************************
+select * from r left outer join s on 
+r.c = s.c;
+     a      | b  | c  | c  |     d      
+------------+----+----+----+------------
+ a1         | 15 | 15 |    | 
+ a2         | 20 | 20 |    | 
+ a3         | 30 | 30 | 30 | d1        
+ a4         |  0 |    |    | 
+
+      a      | b  | c  | c  |     d      
+------------+----+----+----+------------
+ a1         | 15 | 15 |    | 
+ a2         | 20 | 20 |    | 
+ a3         | 30 | 30 | 30 | d1        
+ a4         |  0 |    |    | 
+            |    |    |    | d2        
+
+=============================================================================================
+
+=== 3
+create function insert_team_medal_result() returns trigger as $medal_trigger$
+	declare
+		event_query record;
+		country_query record;
+		team_event_val integer;
+		country_val character(3);
+	begin
+		select into event_query event_id, is_team_event from events 
+		where event_id = NEW.event_id;
+		team_event_val := event_query.is_team_event;
+		if (team_event_val = 1) then
+			select into country_query 
+			countries.country_id from countries inner join players
+			on players.country_id = countries.country_id 
+			inner join results on 
+			players.player_id = results.player_id
+			where results.event_id = NEW.event_id;
+			country_val := country_query.country_id;
+			
+			insert into teamMedals values
+			(country_val, NEW.event_id, NEW.medal,
+			NEW.result);
+		end if;
+		RETURN NEW;
+	end;
+$medal_trigger$
+language 'plpgsql';
+
+create trigger check_team_event after insert on results
+	for each row execute procedure insert_team_medal_result();
+
+// check to see if trigger works
+insert into results values('E81', 'EGBELAAR01', 'GOLD', 30.00);
+postgres=# select * from teamMedals; 
+**************** RESULT ***************************************************************
+CREATE FUNCTION
+CREATE TRIGGER
+INSERT 0 1
+country_id | event_id |  medal  | result 
+------------+----------+---------+--------
+ NGR        | E81      | GOLD    |     30
+(1 row)
+=============================================================================================
+=== 4
+create or replace function xmlGenerate() returns text as $$
+declare
+	record_val record;
+	array_len integer;
+	str text;
+	str_query record;
+begin
+	str := '';
+	/* loop thru the query results */
+	for record_val in select events.name as event_name, array_agg(players.name) as players from results inner join events on results.event_id = events.event_id inner join players on results.player_id = players.player_id and players.country_id = 'USA' and results.medal = 'GOLD' and events.olympic_id = 'ATH2004' group by 1 LOOP
+
+	/* get the event information */
+	select concat(str, '<medal>') as str into str_query;
+	str := str_query.str;
+	select concat(str, '<event>', record_val.event_name, '</event>') as str into str_query;
+	str := str_query.str;
+	select array_length(record_val.players, 1) into array_len;
+	if array_len = 1 then
+		select concat(str, '<player>', record_val.players[1], '</player>') as str into str_query;
+		str := str_query.str;
+	else
+		select concat(str, '<players>') as str into str_query;
+		str := str_query.str;
+		for i in 1..array_len loop
+			select concat(str, '<player>', record_val.players[i], '</player>') as str into str_query;
+			str := str_query.str;
+		end loop;
+		select concat(str, '</players>') as str into str_query;
+		str := str_query.str;
+	end if;
+	select concat(str, '</medal>') as str into str_query;
+	str := str_query.str;
+	end loop;
+	return str;
+end;
+$$ language 'plpgsql';
+
+select xmlGenerate();
+**************** RESULT ***************************************************************
+					xmlgenerate 
+--------------------------------------------------------------------------------
+-----------------
+ <medal><event>100m Butterfly Men                      </event><player>Michael P
+helps                          </player></medal><medal><event>200m Men          
+                      </event><player>Shawn Crawford                          </
+player></medal><medal><event>400m Individual Medley Men              </event><pl
+ayer>Michael Phelps                          </player></medal><medal><event>100m
+ Men                                </event><player>Justin Gatlin               
+            </player></medal><medal><event>200m Individual Medley Men           
+   </event><player>Michael Phelps                          </player></medal><med
+al><event>100m Backstroke Women                   </event><player>Natalie Coughl
+in                        </player></medal><medal><event>4x200m Freestyle Relay 
+Men              </event><players><player>Peter Vanderkaay                      
+  </player><player>Michael Phelps                          </player><player>Ryan
+ Lochte                             </player><player>Klete Keller               
+             </player><player>Scott Goldblatt                         </player><
+/players></medal><medal><event>Long Jump Men                           </event><
+player>Dwight Phillips                         </player></medal><medal><event>10
+0m Hurdles Women                      </event><player>Joanna Hayes              
+              </player></medal><medal><event>4x400m Relay Women                 
+     </event><players><player>Deedee Trotter                          </player><
+player>Sanya Richards                          </player><player>Monique Henderso
+n                       </player><player>Monique Hennagan                        </player></players></medal><medal><event>400m Men                                </event><player>Jeremy Wariner                          </player></medal><meda
+l><event>200m Breaststroke Women                 </event><player>Amanda Beard                            </player></medal><medal><event>4x200m Freestyle Relay Women            </event><players><player>Dana Vollmer                            </player><player>Kaitlin Sandeno                         </player><player>Carly Piper                             </player><player>Lindsay Benko                           </player><player>Natalie Coughlin                        </player></players></medal><medal><event>200m Backstroke Men                     </event><player>Aaron Peirsol                           </player></medal><medal><event>4x100m Medley Relay Men                 </event><players><player>Neil Walker                             </player><player>Aaron Peirsol                           </player><player>Michael Phelps                          </player><player>Jason Lezak                             </player><player>Brendan Hansen                          </player><player>Lenny Krayzelburg                       </player><player>Ian Crocker                             </player></players></medal><medal><event>4x400m Relay Men                        </event><players><player>Jeremy Wariner                          </player><player>Darold Williamson                       </player><player>Otis Harris Jr                          </player><player>Derrick Brew                            </player></players></medal><medal><event>50m Freestyle Men                       </event><player>Gary Hall Jr.                           </player></medal><medal><event>100m Backstroke Men                     </event><player>Aaron Peirsol                           </player></medal><medal><event>Pole Vault Men                          </event><player>Timothy Mack                            </player></medal><medal><event>200m Butterfly Men                      </event><player>Michael Phelps                          </player></medal>
+(1 row)
+ 
+=============================================================================================
+
