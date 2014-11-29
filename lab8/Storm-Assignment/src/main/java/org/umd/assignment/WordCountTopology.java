@@ -36,11 +36,21 @@ import org.umd.assignment.spout.TwitterSampleSpout;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
+import java.util.TreeSet;
+import java.util.Iterator;
+import java.util.Set;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashSet;
 
 /**
  * This topology demonstrates Storm's stream groupings and multilang capabilities.
  */
 public class WordCountTopology {
+
+  public static HashSet<String> stopWords;
   public static class SplitSentence extends ShellBolt implements IRichBolt {
 
     public SplitSentence() {
@@ -60,8 +70,10 @@ public class WordCountTopology {
 
   public static class WordCount extends BaseBasicBolt {
     Map<String, Integer> counts = new HashMap<String, Integer>();
+    TreeMap<String,Integer> sortedCounts = new TreeMap<String,Integer>();
 
     @Override
+
     public void execute(Tuple tuple, BasicOutputCollector collector) {
       
 		// ----------------- Task 2	---------------------------------
@@ -74,20 +86,59 @@ public class WordCountTopology {
 		// ---------------------------------------------------------
 
 
-		String word = tuple.getString(0);
-		Integer count = counts.get(word);
-		if (count == null)
-			count = 0;
-		count++;
-		counts.put(word, count);
-		collector.emit(new Values(word, count));
-
+		String word = tuple.getString(0).toLowerCase();
+		if (!stopWords.contains(word) && !(word.equals("obama") )) {
+			//System.out.print(word);
+			Integer count = counts.get(word);
+			if (count == null)
+				count = 0;
+			count++;
+			counts.put(word, count);
+			collector.emit(new Values(word, count));
+		}
 
     }
 
 	@Override
 	public void cleanup()
 	{
+		Iterator iter = counts.entrySet().iterator();
+		Set<Map.Entry> new_pairs;
+		TreeSet<Integer> curr_counts = new TreeSet<Integer>();
+		Integer smallest_val;
+		String smallest_string = "";
+			
+		while (iter.hasNext()) {
+			smallest_string = "";
+			Map.Entry pairs = (Map.Entry)iter.next();
+			if (sortedCounts.size() >= 10) {
+
+				smallest_val = curr_counts.first();
+				Iterator pair_iter = sortedCounts.entrySet().iterator();
+				while (pair_iter.hasNext()) {
+					Map.Entry current_pair = (Map.Entry)pair_iter.next();
+					Integer current_val = (Integer)current_pair.getValue();
+					if (current_val.compareTo(smallest_val) <= 0) {
+						smallest_string = (String)current_pair.getKey();
+					}
+				}
+				sortedCounts.remove(smallest_string);
+				curr_counts.remove(smallest_val);
+
+				curr_counts.add((Integer)pairs.getValue());
+				sortedCounts.put((String)pairs.getKey(), (Integer)pairs.getValue());
+			} else {
+				curr_counts.add((Integer)pairs.getValue());
+				sortedCounts.put((String)pairs.getKey(), (Integer)pairs.getValue());
+			}
+			
+		}
+		Iterator pair_iter = sortedCounts.entrySet().iterator();
+		while (pair_iter.hasNext()) {
+			Map.Entry current_pair = (Map.Entry)pair_iter.next();
+			System.out.println("Final Count [" + (String)current_pair.getKey() + " " + (Integer)current_pair.getValue());	
+		}
+		//System.out.println("done!");
 		// ------------------------  Task 3 ---------------------------------------
 		//
 		//
@@ -102,6 +153,8 @@ public class WordCountTopology {
 		//  For a simple example see inside the runStorm.sh.
 		//
 		//--------------------------------------------------------------------------
+		
+
 	}
 
     @Override
@@ -113,6 +166,19 @@ public class WordCountTopology {
   public static void main(String[] args) throws Exception {
 
     TopologyBuilder builder = new TopologyBuilder();
+    stopWords = new HashSet<String>();
+
+    /* Get the words that you do not count for */
+    try {
+
+    	BufferedReader reader = new BufferedReader(new FileReader("/home/terrapin/datascience-fall14/lab8/Stopwords.txt"));
+    	String currentWord;
+    	while ( (currentWord = reader.readLine()) != null) {
+    		stopWords.add(currentWord);
+    	}
+    } catch (IOException e) {
+    	// something to be done here
+    }
 
 	// ---------------------------- Task 1 -------------------------------------
 	//
@@ -124,7 +190,8 @@ public class WordCountTopology {
 	//--------------------------------------------------------------------------
 
 	// Setting up a spout
-    builder.setSpout("spout", new RandomSentenceSpout(), 3); //builder.setSpout("spout", new TwitterSampleSpout(), 3);
+	builder.setSpout("spout", new RandomSentenceSpout(), 3);
+	//builder.setSpout("spout", new TwitterSampleSpout(), 3);
 
 	// Setting up bolts
     builder.setBolt("split", new SplitSentence(), 3).shuffleGrouping("spout");
@@ -153,9 +220,11 @@ public class WordCountTopology {
 	  //
 	  // ----------------------------------------------------------------------
 
-      Thread.sleep(10000);
+      // wait for 10 minutes until the data gathering is complete
+      Thread.sleep(600000);
 
       cluster.shutdown(); // blot "cleanup" function is called when cluster is shutdown (only works in local mode)
+    
     }
   }
 }

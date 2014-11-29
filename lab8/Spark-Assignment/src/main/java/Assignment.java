@@ -20,6 +20,7 @@ import com.google.common.collect.Lists;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.function.FlatMapFunction;
 import org.apache.spark.api.java.function.Function2;
+import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.PairFunction;
 import org.apache.spark.api.java.StorageLevels;
 import org.apache.spark.streaming.Duration;
@@ -49,20 +50,56 @@ public final class Assignment {
         JavaDStream<String> words = lines.flatMap(new FlatMapFunction<String, String>() {
                 @Override
                 public Iterable<String> call(String x) {
-                return Lists.newArrayList(SPACE.split(x));
+                    String newStr = x.toLowerCase();
+                return Lists.newArrayList(SPACE.split(newStr));
                 }
                 });
+        
 
-        JavaPairDStream<String, Integer> wordCounts = words.mapToPair(
-                new PairFunction<String, String, Integer>() {
+        JavaDStream<String> obamaWords = words.filter(
+            new Function<String, Boolean>() {
+                    public Boolean call(String word) { return ( word.equals("#Obama") || word.lower.equals("#obama") ); }
+                }
+            );
+            
+
+        JavaPairDStream<String, Integer> wordCounts = obamaWords.mapToPair(
+            new PairFunction<String, String, Integer>() {
+            @Override
+            public Tuple2<String, Integer> call(String s) {
+            return new Tuple2<String, Integer>(s, 1);
+            }
+        });
+
+        Function2<Integer,Integer, Integer> func = new Function2<Integer, Integer, Integer>() {
+            @Override public Integer call(Integer int1, Integer int2) throws Exception{
+                return int1 + int2;
+            }
+        };
+
+        JavaPairDStream<String,Integer> wordCountsAgg = wordCounts.reduceByKeyAndWindow( 
+            func, new Duration(30000), new Duration(10000));           
+    
+
+
+       /* JavaDStream<Integer> obamaCounts = wordCountsAgg.reduce(new Function2<Integer, Integer, Integer>() {
+
+            @Override
+            public Integer call(Integer i1, Integer i2) {
+                return i1 + i2;
+            }
+
+            });*/
+          /*JavaDStream<Integer> obamaCounts = wordCountsAgg.reduce(new Function<Integer, Integer>() {
                 @Override
-                public Tuple2<String, Integer> call(String s) {
-                return new Tuple2<String, Integer>(s, 1);
+                public Integer call(Integer i1, Integer i2) {
+                return i1 + i2;
                 }
-                });
-
-        wordCounts.print();
-
+                });  
+            */       
+       
+        //obamaCounts.print();
+        wordCountsAgg.print();
         ssc.start();
 
         ssc.awaitTermination();

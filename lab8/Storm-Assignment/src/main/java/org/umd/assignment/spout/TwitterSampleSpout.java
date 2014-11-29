@@ -17,8 +17,6 @@
  */
 
 
-//package org.umd.assignment.spout;
-
 package org.umd.assignment.spout;
 
 import java.util.Map;
@@ -83,12 +81,13 @@ public class TwitterSampleSpout extends BaseRichSpout {
 	//------------------------------------------------------------------------
 
 	public TwitterSampleSpout() {		
-		this.consumerKey = "aqMhHjo25IFTlQqmT3A1YNnPVs";
-		this.consumerSecret = "bdGjNYhusZSbzLQ6695veAJG9KtkBtAHYZwwLEnfGujqGz5j987";
-		this.accessToken = "c11412092-ks3eYiWAL8SKcTAJ3SMDdAkBJss7gOHMTk2YlwPFZ";
-		this.accessTokenSecret = "diDFa3JCYbgBv3D5MZei2xdHkGdZcDEqLGJcbNx7P5fKmv";
-		this.keyWords = new String[1];
+		this.consumerKey = "0Rsw6k5dWiK931Qy7AH7Tpza1";
+		this.consumerSecret = "YjtCrgMtIaCioTJHXCU1HvYtp6ex9gex8R6UOsb4XD1TD33cGx";
+		this.accessToken = "328481914-Aaajfw6KdfAnm1Mklzp0HqtTXI10OZGrKYfqPwxh";
+		this.accessTokenSecret = "tVJbCPOJRdGaIFs2pu5mBQlMcXDJRkujoyUbRGRgn7ehe";
+		this.keyWords = new String[2];
 		this.keyWords[0] = "obama"; /* Filters All Tweets with word Obama */
+		this.keyWords[1] = "Obama";
 	}
 
 	@Override
@@ -148,7 +147,7 @@ public class TwitterSampleSpout extends BaseRichSpout {
 			FilterQuery query = new FilterQuery().track(keyWords);
 			twitterStream.filter(query);
 		}
-
+		_twitterStream = twitterStream;
 	}
 
 	@Override

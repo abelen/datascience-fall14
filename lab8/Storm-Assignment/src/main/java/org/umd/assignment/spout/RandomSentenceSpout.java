@@ -44,8 +44,9 @@ public class RandomSentenceSpout extends BaseRichSpout {
   @Override
   public void nextTuple() {
     Utils.sleep(100);
-    String[] sentences = new String[]{ "the cow jumped over the moon", "an apple a day keeps the doctor away",
-        "four score and seven years ago", "snow white and the seven dwarfs", "i am at two with nature" };
+    String[] sentences = new String[]{ "obama", "Obama" , "here obama", "i am at two with nature obama Obama obama Obama"
+        , "obama is cool", "obama is god", "twitter is here!",
+        "here obama", "bla bla obama", "123 obama", "12345 obama 2335", "playstation ftw obama", "sega saturn obama", "eieiei obama 3393939939 38382929383"};
     String sentence = sentences[_rand.nextInt(sentences.length)];
     _collector.emit(new Values(sentence));
   }

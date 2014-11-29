@@ -20,6 +20,7 @@ import com.google.common.collect.Lists;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.function.FlatMapFunction;
 import org.apache.spark.api.java.function.Function2;
+import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.PairFunction;
 import org.apache.spark.api.java.StorageLevels;
 import org.apache.spark.streaming.Duration;
@@ -74,6 +75,16 @@ public final class JavaNetworkWordCount {
                     return i1 + i2;
                     }
                     });
+
+
+        /*JavaDStream<Integer> obamaCounts = wordCounts.reduce(new Function<Integer, Integer>() {
+
+            @Override
+            public Integer call(Integer i1, Integer i2) {
+                return i1 + i2;
+            }
+
+            });*/
 
         wordCounts.print();
 

@@ -1,24 +1,794 @@
+Anthony Belen
+CMSC498O Lab8 
+Submission.txt
+
 ===================== Storm: WordCountTopology.java
 
+NOTE: I had used the following RandomSentenceSpout.java for
+my spout due to the fact that my Twitter authentication had 
+kept getting the following error:
 
+Establishing connection.
+15440 [Twitter Stream consumer-1[Establishing connection]] INFO twitter4j.TwitterStreamImpl - 401:Authentication credentials (https://dev.twitter.com/pages/auth) were missing or incorrect. Ensure that you have set valid consumer key/secret, access token/secret, and the system clock is in sync.
+<html>\n<head>\n<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>\n<title>Error 401 Unauthorized</title>
+</head>
+<body>
+<h2>HTTP ERROR: 401</h2>
+<p>Problem accessing '/1.1/statuses/filter.json'. Reason:
+ Unauthorized
+
+</body>
+</html>
+
+RandomSentenceSpout.java
+/**
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+//package storm.starter.spout;
+
+package org.umd.assignment.spout;
+
+import backtype.storm.spout.SpoutOutputCollector;
+import backtype.storm.task.TopologyContext;
+import backtype.storm.topology.OutputFieldsDeclarer;
+import backtype.storm.topology.base.BaseRichSpout;
+import backtype.storm.tuple.Fields;
+import backtype.storm.tuple.Values;
+import backtype.storm.utils.Utils;
+
+import java.util.Map;
+import java.util.Random;
+
+public class RandomSentenceSpout extends BaseRichSpout {
+  SpoutOutputCollector _collector;
+  Random _rand;
+
+
+  @Override
+  public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) {
+    _collector = collector;
+    _rand = new Random();
+  }
+
+  @Override
+  public void nextTuple() {
+    Utils.sleep(100);
+    String[] sentences = new String[]{ "obama", "Obama" , "here obama", "i am at two with nature obama Obama obama Obama"
+        , "obama is cool", "obama is god", "twitter is here!",
+        "here obama", "bla bla obama", "123 obama", "12345 obama 2335", "playstation ftw obama", "sega saturn obama", "eieiei obama 3393939939 38382929383"};
+    String sentence = sentences[_rand.nextInt(sentences.length)];
+    _collector.emit(new Values(sentence));
+  }
+
+  @Override
+  public void ack(Object id) {
+  }
+
+  @Override
+  public void fail(Object id) {
+  }
+
+  @Override
+  public void declareOutputFields(OutputFieldsDeclarer declarer) {
+    declarer.declare(new Fields("word"));
+  }
+
+}
+
+WordCountTopology.java
+/**
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.umd.assignment;
+
+import backtype.storm.Config;
+import backtype.storm.LocalCluster;
+import backtype.storm.StormSubmitter;
+import backtype.storm.task.ShellBolt;
+import backtype.storm.topology.BasicOutputCollector;
+import backtype.storm.topology.IRichBolt;
+import backtype.storm.topology.OutputFieldsDeclarer;
+import backtype.storm.topology.TopologyBuilder;
+import backtype.storm.topology.base.BaseBasicBolt;
+import backtype.storm.tuple.Fields;
+import backtype.storm.tuple.Tuple;
+import backtype.storm.tuple.Values;
+
+import org.umd.assignment.spout.RandomSentenceSpout;
+import org.umd.assignment.spout.TwitterSampleSpout;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.TreeSet;
+import java.util.Iterator;
+import java.util.Set;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashSet;
+
+/**
+ * This topology demonstrates Storm's stream groupings and multilang capabilities.
+ */
+public class WordCountTopology {
+
+  public static HashSet<String> stopWords;
+  public static class SplitSentence extends ShellBolt implements IRichBolt {
+
+    public SplitSentence() {
+      super("python", "splitsentence.py");
+    }
+
+    @Override
+    public void declareOutputFields(OutputFieldsDeclarer declarer) {
+      declarer.declare(new Fields("word"));
+    }
+
+    @Override
+    public Map<String, Object> getComponentConfiguration() {
+      return null;
+    }
+  }
+
+  public static class WordCount extends BaseBasicBolt {
+    Map<String, Integer> counts = new HashMap<String, Integer>();
+    TreeMap<String,Integer> sortedCounts = new TreeMap<String,Integer>();
+
+    @Override
+
+    public void execute(Tuple tuple, BasicOutputCollector collector) {
+      
+        // ----------------- Task 2 ---------------------------------
+        //
+        //
+        //  Modify this code to exclude stop-words from counting.
+        //  Stopword list is provided in the lab folder. 
+        //
+        //
+        // ---------------------------------------------------------
+
+
+        String word = tuple.getString(0).toLowerCase();
+        if (!stopWords.contains(word) && !(word.equals("obama") )) {
+            //System.out.print(word);
+            Integer count = counts.get(word);
+            if (count == null)
+                count = 0;
+            count++;
+            counts.put(word, count);
+            collector.emit(new Values(word, count));
+        }
+
+    }
+
+    @Override
+    public void cleanup()
+    {
+        Iterator iter = counts.entrySet().iterator();
+        Set<Map.Entry> new_pairs;
+        TreeSet<Integer> curr_counts = new TreeSet<Integer>();
+        Integer smallest_val;
+        String smallest_string = "";
+            
+        while (iter.hasNext()) {
+            smallest_string = "";
+            Map.Entry pairs = (Map.Entry)iter.next();
+            if (sortedCounts.size() >= 10) {
+
+                smallest_val = curr_counts.first();
+                Iterator pair_iter = sortedCounts.entrySet().iterator();
+                while (pair_iter.hasNext()) {
+                    Map.Entry current_pair = (Map.Entry)pair_iter.next();
+                    Integer current_val = (Integer)current_pair.getValue();
+                    if (current_val.compareTo(smallest_val) <= 0) {
+                        smallest_string = (String)current_pair.getKey();
+                    }
+                }
+                sortedCounts.remove(smallest_string);
+                curr_counts.remove(smallest_val);
+
+                curr_counts.add((Integer)pairs.getValue());
+                sortedCounts.put((String)pairs.getKey(), (Integer)pairs.getValue());
+            } else {
+                curr_counts.add((Integer)pairs.getValue());
+                sortedCounts.put((String)pairs.getKey(), (Integer)pairs.getValue());
+            }
+            
+        }
+        Iterator pair_iter = sortedCounts.entrySet().iterator();
+        while (pair_iter.hasNext()) {
+            Map.Entry current_pair = (Map.Entry)pair_iter.next();
+            System.out.println("Final Count [" + (String)current_pair.getKey() + " " + (Integer)current_pair.getValue());   
+        }
+        //System.out.println("done!");
+        // ------------------------  Task 3 ---------------------------------------
+        //
+        //
+        //  This function gets called when the Stream processing finishes.
+        //  MODIFY this function to print the most frequent words that co-occur 
+        //  with Obama [The TwitterSimpleSpout already gives you Tweets that contain
+        //  the word obama].
+        //
+        //  Since multiple threads will be doing the same cleanup operation, writing the
+        //  output to a file might not work as desired. One way to do this would be
+        //  print the output (using System.out.println) and do a grep/awk/sed on that.
+        //  For a simple example see inside the runStorm.sh.
+        //
+        //--------------------------------------------------------------------------
+        
+
+    }
+
+    @Override
+    public void declareOutputFields(OutputFieldsDeclarer declarer) {
+      declarer.declare(new Fields("word", "count"));
+    }
+  }
+
+  public static void main(String[] args) throws Exception {
+
+    TopologyBuilder builder = new TopologyBuilder();
+    stopWords = new HashSet<String>();
+
+    /* Get the words that you do not count for */
+    try {
+
+        BufferedReader reader = new BufferedReader(new FileReader("/home/terrapin/datascience-fall14/lab8/Stopwords.txt"));
+        String currentWord;
+        while ( (currentWord = reader.readLine()) != null) {
+            stopWords.add(currentWord);
+        }
+    } catch (IOException e) {
+        // something to be done here
+    }
+
+    // ---------------------------- Task 1 -------------------------------------
+    //
+    //      You need to use TwitterSampleSpout() for the assignemt. But, it won't work
+    //      unless you set up the access token correctly in the TwitterSampleSpout.java
+    //
+    //      RandomSentenceSpout() simply spits out a random sentence. 
+    //
+    //--------------------------------------------------------------------------
+
+    // Setting up a spout
+    builder.setSpout("spout", new RandomSentenceSpout(), 3);
+    //builder.setSpout("spout", new TwitterSampleSpout(), 3);
+
+    // Setting up bolts
+    builder.setBolt("split", new SplitSentence(), 3).shuffleGrouping("spout");
+    builder.setBolt("count", new WordCount(), 3).fieldsGrouping("split", new Fields("word"));
+
+    Config conf = new Config();
+    conf.setDebug(true);
+
+
+    if (args != null && args.length > 0) {
+      conf.setNumWorkers(3);
+
+      StormSubmitter.submitTopologyWithProgressBar(args[0], conf, builder.createTopology());
+    }
+    else {
+      conf.setMaxTaskParallelism(3);
+
+      LocalCluster cluster = new LocalCluster();
+      cluster.submitTopology("word-count", conf, builder.createTopology());
+
+      // --------------------------- Task 4 ---------------------------------
+      //
+      //    The sleep time simply indicates for how long you want to keep your
+      //    system up and running. 10000 (miliseconds) here means 10 seconds.
+      //    
+      //
+      // ----------------------------------------------------------------------
+
+      // wait for 10 minutes until the data gathering is complete
+      Thread.sleep(600000);
+
+      cluster.shutdown(); // blot "cleanup" function is called when cluster is shutdown (only works in local mode)
+    
+    }
+  }
+}
 
 ===================== Storm: TwitterSampleSpout.java
+/**
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 
+package org.umd.assignment.spout;
 
+import java.util.Map;
+import java.util.concurrent.LinkedBlockingQueue;
+
+import twitter4j.FilterQuery;
+import twitter4j.StallWarning;
+import twitter4j.Status;
+import twitter4j.StatusDeletionNotice;
+import twitter4j.StatusListener;
+import twitter4j.TwitterStream;
+import twitter4j.TwitterStreamFactory;
+import twitter4j.auth.AccessToken;
+import twitter4j.conf.ConfigurationBuilder;
+
+import backtype.storm.Config;
+import backtype.storm.spout.SpoutOutputCollector;
+import backtype.storm.task.TopologyContext;
+import backtype.storm.topology.OutputFieldsDeclarer;
+import backtype.storm.topology.base.BaseRichSpout;
+import backtype.storm.tuple.Fields;
+import backtype.storm.tuple.Values;
+import backtype.storm.utils.Utils;
+
+@SuppressWarnings("serial")
+public class TwitterSampleSpout extends BaseRichSpout {
+
+    SpoutOutputCollector _collector;
+    LinkedBlockingQueue<String> queue = null;
+    TwitterStream _twitterStream;
+    String consumerKey;
+    String consumerSecret;
+    String accessToken;
+    String accessTokenSecret;
+    String[] keyWords;
+    
+    public TwitterSampleSpout(String consumerKey, String consumerSecret,
+            String accessToken, String accessTokenSecret, String[] keyWords) {
+        this.consumerKey = consumerKey;
+        this.consumerSecret = consumerSecret;
+        this.accessToken = accessToken;
+        this.accessTokenSecret = accessTokenSecret;
+        this.keyWords = keyWords;
+    }
+
+
+    //----------------------- Task 0 -----------------------------------------
+    //
+    //  Use the following link (for visual help) to create a Twitter App for yourselves. In summary,
+    //  the steps are:
+    //              (a) Go to apps.twitter.com
+    //              (b) Create an App [Put any website as an URL]
+    //              (c) Go to "keys and Access Token tab"
+    //              (d) Create you access token
+    //              (e) Copy over the ConsumerKey, consumerSecret, accesstoken, and accessTokenSecret
+    //              in the TwitterSampleSpout()
+    //
+    //  https://dev.twitter.com/oauth/overview/application-owner-access-tokens
+    //  
+    //
+    //
+    //------------------------------------------------------------------------
+
+    public TwitterSampleSpout() {       
+        this.consumerKey = "JLsOWJ0wVmpuZnBc3v3Rpwjl1";
+        this.consumerSecret = "Y0yqSZwBt0vW3OrRGYdWZEicVN6lnj0DMQmbxQpXc9HVqOGPzO";
+        this.accessToken = "328481914-7KcAkIRrtQnNBo3CnTk02mxXAXhK8TClmJv0njDM";
+        this.accessTokenSecret = "1qkljXOYEj5MziSCljQRVhTajBdCnA6wDhIuXmHz3PIrs";
+        this.keyWords = new String[1];
+        this.keyWords[0] = "obama"; /* Filters All Tweets with word Obama */
+        this.keyWords[1] = "Obama";
+    }
+
+    @Override
+    public void open(Map conf, TopologyContext context,
+            SpoutOutputCollector collector) {
+        queue = new LinkedBlockingQueue<String>(1000);
+        _collector = collector;
+
+        StatusListener listener = new StatusListener() {
+
+            @Override
+            public void onStatus(Status status) {
+            
+                queue.offer(status.getText());
+            }
+
+            @Override
+            public void onDeletionNotice(StatusDeletionNotice sdn) {
+            }
+
+            @Override
+            public void onTrackLimitationNotice(int i) {
+            }
+
+            @Override
+            public void onScrubGeo(long l, long l1) {
+            }
+
+            @Override
+            public void onException(Exception ex) {
+            }
+
+            @Override
+            public void onStallWarning(StallWarning arg0) {
+                // TODO Auto-generated method stub
+
+            }
+
+        };
+
+        TwitterStream twitterStream = new TwitterStreamFactory(
+                new ConfigurationBuilder().setJSONStoreEnabled(true).build())
+                .getInstance();
+
+        twitterStream.addListener(listener);
+        twitterStream.setOAuthConsumer(consumerKey, consumerSecret);
+        AccessToken token = new AccessToken(accessToken, accessTokenSecret);
+        twitterStream.setOAuthAccessToken(token);
+        
+        if (keyWords.length == 0) {
+
+            twitterStream.sample();
+        }
+
+        else {
+
+            FilterQuery query = new FilterQuery().track(keyWords);
+            twitterStream.filter(query);
+        }
+        _twitterStream = twitterStream;
+    }
+
+    @Override
+    public void nextTuple() {
+        String ret = queue.poll();
+        if (ret == null) {
+            Utils.sleep(50);
+        } else {
+             
+            _collector.emit(new Values(ret));
+
+        }
+    }
+
+    @Override
+    public void close() {
+        _twitterStream.shutdown();
+    }
+
+    @Override
+    public Map<String, Object> getComponentConfiguration() {
+        Config ret = new Config();
+        ret.setMaxTaskParallelism(1);
+        return ret;
+    }
+
+    @Override
+    public void ack(Object id) {
+    }
+
+    @Override
+    public void fail(Object id) {
+    }
+
+    @Override
+    public void declareOutputFields(OutputFieldsDeclarer declarer) {
+        declarer.declare(new Fields("tweet"));
+    }
+
+}
 
 ===================== Storm: Execution Output for a Sample Run
 
+Running the above program with the following command:
 
+terrapin@terrapin-VirtualBox:~/datascience-fall14/lab8/Storm-Assignment$ mvn cpile exec:java -Dstorm.topology=org.umd.assignment.WordCountTopology | grep "Final Count" | awk -F '[' '{print $2}' | sort -r -n -k2 | head -n 10
 
+bla 2476
+god 1346
+twitter 1330
+here! 1330
+123 1310
+cool 1309
+2335 1302
+12345 1302
+sega 1277
+saturn 1277
 
 ===================== Spark: Assignment.java
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+import scala.Tuple2;
+import com.google.common.collect.Lists;
 
+import org.apache.spark.SparkConf;
+import org.apache.spark.api.java.function.FlatMapFunction;
+import org.apache.spark.api.java.function.Function2;
+import org.apache.spark.api.java.function.Function;
+import org.apache.spark.api.java.function.PairFunction;
+import org.apache.spark.api.java.StorageLevels;
+import org.apache.spark.streaming.Duration;
+import org.apache.spark.streaming.api.java.JavaDStream;
+import org.apache.spark.streaming.api.java.JavaPairDStream;
+import org.apache.spark.streaming.api.java.JavaReceiverInputDStream;
+import org.apache.spark.streaming.api.java.JavaStreamingContext;
 
+import java.util.regex.Pattern;
 
+public final class Assignment {
+    private static final Pattern SPACE = Pattern.compile(" ");
+
+    public static void main(String[] args) {
+
+        // Create the context with a 10 second batch size
+        SparkConf sparkConf = new SparkConf().setAppName("Assignment");
+        JavaStreamingContext ssc = new JavaStreamingContext(sparkConf,  new Duration(10000));
+
+        // Create a JavaReceiverInputDStream on target ip:port and count the
+        // words in input stream of \n delimited text (eg. generated by 'nc')
+        // Note that no duplication in storage level only for running locally.
+        // Replication necessary in distributed scenario for fault tolerance.
+        JavaReceiverInputDStream<String> lines = ssc.socketTextStream(
+                "localhost", Integer.parseInt("9999"), StorageLevels.MEMORY_AND_DISK_SER);
+
+        JavaDStream<String> words = lines.flatMap(new FlatMapFunction<String, String>() {
+                @Override
+                public Iterable<String> call(String x) {
+                    String newStr = x.toLowerCase();
+                return Lists.newArrayList(SPACE.split(newStr));
+                }
+                });
+        
+
+        JavaDStream<String> obamaWords = words.filter(
+            new Function<String, Boolean>() {
+                    public Boolean call(String word) { return ( word.equals("#Obama") || word.lower.equals("#obama") ); }
+                }
+            );
+            
+
+        JavaPairDStream<String, Integer> wordCounts = obamaWords.mapToPair(
+            new PairFunction<String, String, Integer>() {
+            @Override
+            public Tuple2<String, Integer> call(String s) {
+            return new Tuple2<String, Integer>(s, 1);
+            }
+        });
+
+        Function2<Integer,Integer, Integer> func = new Function2<Integer, Integer, Integer>() {
+            @Override public Integer call(Integer int1, Integer int2) throws Exception{
+                return int1 + int2;
+            }
+        };
+
+        JavaPairDStream<String,Integer> wordCountsAgg = wordCounts.reduceByKeyAndWindow( 
+            func, new Duration(30000), new Duration(10000));           
+    
+
+        wordCountsAgg.print();
+        ssc.start();
+
+        ssc.awaitTermination();
+    }
+}
 
 ===================== Spark: Execution Output for a Sample Run
+terrapin@terrapin-VirtualBox:~/datascience-fall14/lab8/Spark-Assignment$ /homeerrapin/datascience-fall14/lab6/spark-1.1.0-bin-cdh4/bin/spark-submit --class Assignment --master 'local[4]' target/streaming-project-1.0.jar
+-------------------------------------------
+Time: 1417022860000 ms
+-------------------------------------------
 
+-------------------------------------------
+Time: 1417022870000 ms
+-------------------------------------------
+(#obama,5)
 
+-------------------------------------------
+Time: 1417022880000 ms
+-------------------------------------------
+(#obama,6)
 
+-------------------------------------------
+Time: 1417022890000 ms
+-------------------------------------------
+(#obama,6)
+
+-------------------------------------------
+Time: 1417022900000 ms
+-------------------------------------------
+(#obama,1)
+
+-------------------------------------------
+Time: 1417022910000 ms
+-------------------------------------------
+
+-------------------------------------------
+Time: 1417022920000 ms
+-------------------------------------------
+
+-------------------------------------------
+Time: 1417022930000 ms
+-------------------------------------------
+(#obama,1)
+
+-------------------------------------------
+Time: 1417022940000 ms
+-------------------------------------------
+(#obama,3)
+
+-------------------------------------------
+Time: 1417022950000 ms
+-------------------------------------------
+(#obama,3)
+
+-------------------------------------------
+Time: 1417022960000 ms
+-------------------------------------------
+(#obama,2)
+
+-------------------------------------------
+Time: 1417022970000 ms
+-------------------------------------------
+
+-------------------------------------------
+Time: 1417022980000 ms
+-------------------------------------------
+
+-------------------------------------------
+Time: 1417022990000 ms
+-------------------------------------------
+
+-------------------------------------------
+Time: 1417023000000 ms
+-------------------------------------------
+
+-------------------------------------------
+Time: 1417023010000 ms
+-------------------------------------------
+
+-------------------------------------------
+Time: 1417023020000 ms
+-------------------------------------------
+(#obama,1)
+
+-------------------------------------------
+Time: 1417023030000 ms
+-------------------------------------------
+(#obama,9)
+
+-------------------------------------------
+Time: 1417023040000 ms
+-------------------------------------------
+(#obama,17)
+
+-------------------------------------------
+Time: 1417023050000 ms
+-------------------------------------------
+(#obama,16)
+
+-------------------------------------------
+Time: 1417023060000 ms
+-------------------------------------------
+(#obama,8)
+
+-------------------------------------------
+Time: 1417023070000 ms
+-------------------------------------------
+(#obama,8)
+
+-------------------------------------------
+Time: 1417023080000 ms
+-------------------------------------------
+(#obama,8)
+
+-------------------------------------------
+Time: 1417023090000 ms
+-------------------------------------------
+(#obama,8)
+
+-------------------------------------------
+Time: 1417023100000 ms
+-------------------------------------------
+
+-------------------------------------------
+Time: 1417023110000 ms
+-------------------------------------------
+
+-------------------------------------------
+Time: 1417023120000 ms
+-------------------------------------------
+
+-------------------------------------------
+Time: 1417023130000 ms
+-------------------------------------------
+
+-------------------------------------------
+Time: 1417023140000 ms
+-------------------------------------------
+
+-------------------------------------------
+Time: 1417023150000 ms
+-------------------------------------------
+(#obama,8)
+
+-------------------------------------------
+Time: 1417023160000 ms
+-------------------------------------------
+(#obama,11)
+
+-------------------------------------------
+Time: 1417023170000 ms
+-------------------------------------------
+(#obama,14)
+
+-------------------------------------------
+Time: 1417023180000 ms
+-------------------------------------------
+(#obama,6)
+
+-------------------------------------------
+Time: 1417023190000 ms
+-------------------------------------------
+(#obama,3)
+
+-------------------------------------------
+Time: 1417023200000 ms
+-------------------------------------------
+
+-------------------------------------------
+Time: 1417023210000 ms
+-------------------------------------------
+
+-------------------------------------------
+Time: 1417023220000 ms
+-------------------------------------------
 
