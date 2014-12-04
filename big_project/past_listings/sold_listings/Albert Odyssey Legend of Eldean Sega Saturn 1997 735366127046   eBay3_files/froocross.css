@@ -1,0 +1,75 @@
+.froo-credit {
+	margin-top:60px;
+	position:relative;
+	text-align:center;
+}
+a.froo-credit {
+	font-family: "verdana", tahoma, arial, sans-serif;
+	font-size: 9px;
+	color: #414b56;
+	text-decoration:none;
+}
+a.froo-credit:hover{
+	font-family: "verdana", tahoma, arial, sans-serif;
+	font-size: 9px;
+	color: #414b56;
+	text-decoration:underline;
+}
+#froo-gallery-inner {
+	position:relative;
+	top:55px;
+	left:35px;
+	width:530px;
+	height:130px;
+}
+#froo-gallery-table {
+	position:relative; 
+	width:530px; 
+	height:130px;
+}
+.sq_holder {
+	background: url('http://xglobal.froo.com/img/sq_holder.png') no-repeat;
+	width:120px;
+	height:120px;
+}
+a.listingTitle {
+	font-family: "verdana", tahoma, arial, sans-serif;
+	font-size: 8px;
+	color: #414b56;
+	text-decoration:none;
+	line-height: 9px;
+	display: block;
+}
+a.listingTitle:hover{
+	font-family: "verdana", tahoma, arial, sans-serif;
+	font-size: 8px;
+	color: #414b56;
+	text-decoration:underline;
+}
+#froo-gallery-label{
+	height:20px;
+	padding:0px; 
+	font-family:sans-serif; 
+	font-size:10px; 
+	font-weight:normal; 
+	color:#fff;
+}
+#froo-gallery-price{
+	height:20px;
+	padding:0px; 
+	font-family:sans-serif; 
+	font-size:10px; 
+	font-weight:normal; 
+	color:#fff;
+}
+#froo-gallery-remaining{
+	height:20px;
+	padding:0px; 
+	font-family:sans-serif; 
+	font-size:10px; 
+	font-weight:normal; 
+	color:#fff;
+}
+#seo { 
+	display: none;
+}

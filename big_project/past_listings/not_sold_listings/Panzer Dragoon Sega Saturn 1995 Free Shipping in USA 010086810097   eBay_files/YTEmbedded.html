@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<!-- saved from url=(0205)http://code.webyclip.com/YTEmbedded.html?_w=460&_h=267&_vid=HV34QjVhNhk&_mid=529ea1020a3c2&origin=http://www.ebay.com&_pi=0&_pid=528e136be8ea7dde06000016&_cb=1&_di=1&_ui=EN&_ipm=false&_ism=false&_iop=false -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        
+        <style type="text/css">
+            body {
+                font-family: 'lucida grande',tahoma,verdana,arial,sans-serif;
+                color: #5C9897;
+                font-size: 12px;
+            }
+            .commandBar {
+                display : none;
+            }
+            .social * {
+                white-space: nowrap;
+            }
+            .webyclipLink {
+                color: #3C5897;
+                display: block;
+                padding-left: 3px;
+                padding-right: 3px;
+                float: left;
+                margin: 1px;
+                font-weight: bold;
+                text-decoration: none;
+            }
+            #webyclipLike {
+                float: left;
+            }
+            #webyclipLike * {
+                float: left;
+            }
+            #webyclipDislike {
+                float: left;
+            }
+            #webyclipDislike * {
+                float: left;
+            }
+            #webyclipReportAbuseLink {
+                float: right;
+            }
+            #webyclipDisclaimer {
+                clear: both;
+                font-size: 11px;
+                font-style: italic;
+                font-family: "lucida grande", tahoma, verdana, arial, sans-serif;
+                color: rgb(80,80,80);
+                text-align: justify;
+            }
+            .likeMediaCommand {
+                display: inline;
+            }
+            .revertLikeMediaCommand {
+                display: none;
+            }
+            .dislikeMediaCommand {
+                display: inline;
+            }
+            .revertDislikeMediaCommand {
+                display: none;
+            }
+            .webyclipLink img {
+                vertical-align: top;
+                text-decoration: none;
+                border: 0 none;
+            }
+            .mediaDisliked .revertDislikeMediaCommand {
+                display: inline;
+            }
+            .mediaDisliked .dislikeMediaCommand {
+                display: none;
+            }
+            .mediaLiked .revertLikeMediaCommand {
+                display: inline;
+            }
+            .mediaLiked .likeMediaCommand {
+                display: none;
+            }
+            #privateMediaImage {
+                display: none;
+            }
+            #privateMediaImage.isPrivate {
+                display: block;
+            }
+        </style>
+        <script id="www-widgetapi-script" src="www-widgetapi.js" async=""></script><script src="iframe_api"></script><script type="text/javascript" src="jquery.tools.min.js"></script>
+        <script type="text/javascript">
+            /*!
+             * jQuery Cookie Plugin v1.3
+             * https://github.com/carhartl/jquery-cookie
+             *
+             * Copyright 2011, Klaus Hartl
+             * Dual licensed under the MIT or GPL Version 2 licenses.
+             * http://www.opensource.org/licenses/mit-license.php
+             * http://www.opensource.org/licenses/GPL-2.0
+             */
+            (function ($, document, undefined) {
+                var pluses = /\+/g;
+                function raw(s) {
+                    return s;
+                }
+                function decoded(s) {
+                    return decodeURIComponent(s.replace(pluses, ' '));
+                }
+                var config = $.cookie = function (key, value, options) {
+                    // write
+                    if (value !== undefined) {
+                        options = $.extend({}, config.defaults, options);
+
+                        if (value === null) {
+                            options.expires = -1;
+                        }
+
+                        if (typeof options.expires === 'number') {
+                            var days = options.expires, t = options.expires = new Date();
+                            t.setDate(t.getDate() + days);
+                        }
+
+                        value = config.json ? JSON.stringify(value) : String(value);
+
+                        return (document.cookie = [
+                            encodeURIComponent(key), '=', config.raw ? value : encodeURIComponent(value),
+                            options.expires ? '; expires=' + options.expires.toUTCString() : '', // use expires attribute, max-age is not supported by IE
+                            options.path    ? '; path=' + options.path : '',
+                            options.domain  ? '; domain=' + options.domain : '',
+                            options.secure  ? '; secure' : ''
+                        ].join(''));
+                    }
+
+                    // read
+                    var decode = config.raw ? raw : decoded;
+                    var cookies = document.cookie.split('; ');
+                    for (var i = 0, l = cookies.length; i < l; i++) {
+                        var parts = cookies[i].split('=');
+                        if (decode(parts.shift()) === key) {
+                            var cookie = decode(parts.join('='));
+                            return config.json ? JSON.parse(cookie) : cookie;
+                        }
+                    }
+                    return null;
+                };
+
+                config.defaults = {};
+
+                $.removeCookie = function (key, options) {
+                    if ($.cookie(key) !== null) {
+                        $.cookie(key, null, options);
+                        return true;
+                    }
+                    return false;
+                };
+
+            })(jQuery, document);
+        </script>
+    </head>
+    <body style="padding:0px; margin:0px;">
+        <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
+        <div id="privateMediaImage">
+            <img src="ownervid.png">
+        </div>
+        <span id="excludeMediaSpan" style="display: none;"><img class="excludeMediaImg" src="iconTrashcan_16x16.gif" style="position: absolute; top: 247px !important; left: 0; z-index: 9999; width: 20px; height: 20px; background-color: white; cursor: pointer; border-radius: 0px 12px 0px 0px;" title="Remove this seller video"></span>
+        <iframe id="player" frameborder="0" allowfullscreen="1" title="YouTube video player" width="460" height="267" src="HV34QjVhNhk.html"></iframe>
+        <div class="commandBar" style="width: 460px; display: block;">
+            <div class="social">
+                <span class="webyclipLink" id="socialCaption">Was this helpful?</span>
+                <a id="webyclipLike" class="webyclipLink likeMediaCommand" href="javascript: void 0" title="Yes this was helpful"><img src="upvote-small.png">Yes</a>
+                <a id="webyclipRevertLike" class="webyclipLink revertLikeMediaCommand" href="javascript: void 0" title="I regret marking this as helpful"><img src="upvoted-small.png">Yes</a>
+                <a id="webyclipDislike" class="webyclipLink dislikeMediaCommand" href="javascript: void 0" title="No this wasn&#39;t helpful"><img src="downvote-small.png">No</a>
+                <a id="webyclipRevertDislike" class="webyclipLink revertDislikeMediaCommand" href="javascript: void 0" title="I regret marking this as not helpful"><img src="downvoted-small.png">No</a>
+            </div>
+            <a id="webyclipReportAbuseLink" class="webyclipLink" href="javascript: void 0"><img src="flag-gray.png">Report</a>
+        </div>
+        <div id="webyclipDisclaimer" style="width: 460px;">This YouTube video has been automatically selected by the WebyClip service. The video contains an example of the item for sale, which may not be representative of the item you are purchasing. Please check the product description and condition before purchasing. No recommendation from the video creator is implied.</div>
+        <script type="text/javascript">
+            if (!window.console) console = {log: function() {}};
+            window.onbeforeunload = function (){
+                if (playing || (startDate != null && endDate == null)) {
+                    if (playing) {
+                        netPlayDuration += (new Date()).getTime()-lastTempStart.getTime();
+                    }
+                    console.log('UNLOAD - duration is ' + netPlayDuration);
+                    postMessageToParent('{"name":"EmbeddedPlayDuration","prodIndex":' + prodIndex + ',"mediaId":"' + mediaId + '","value":' + netPlayDuration + '}');
+                }
+                console.log('bye ;-)');
+            };
+            var getURLParameter = function(name) {
+                return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;
+            };
+
+            function postMessageToParent(msg) {
+                if (typeof(window.parent) !== 'undefined' && typeof(window.parent.postMessage) !== 'undefined') {
+                    window.parent.postMessage(msg, origin);
+                }
+            }
+            var disclaimers  = [];
+            disclaimers['EN'] = [ "", "This YouTube video has been automatically selected by the WebyClip service. The video contains an example of the item for sale, which may not be representative of the item you are purchasing. Please check the product description and condition before purchasing. No recommendation from the video creator is implied." ];
+            disclaimers['DE'] = [ "", "Dieses YouTube Video wurde automatisiert ausgewählt durch den Service von WebyClip. Der Inhalt des Videos ist nur beispielhaft und entspricht nicht unbedingt dem angebotenen Artikel des Verkäufers. Bitte lesen Sie die vollständige Artikelbeschreibung und sämtliche weitere Informationen des Verkäufers, bevor Sie den Artikel kaufen bzw. Ihr Gebot abgeben. Für den Inhalt des Videos ist allein der Ersteller verantwortlich." ];
+            var uiStrings = [];
+            uiStrings['EN'] = [];
+            uiStrings['DE'] = [];
+            uiStrings['EN']['was_this_helfull'] = 'Was this helpful?';
+            uiStrings['EN']['yes_this_was_helpful'] = 'Yes this was helpful';
+            uiStrings['EN']['i_regret_marking_this_this_as_helpful'] = 'I regret marking this as helpful';
+            uiStrings['EN']['no_this_wasnt_helpful'] = 'No this wasn\'t helpful';
+            uiStrings['EN']['i_regret_marking_this_as_not_helpful'] = 'I regret marking this as not helpful';
+            uiStrings['EN']['yes'] = 'Yes';
+            uiStrings['EN']['no'] = 'No';
+            uiStrings['EN']['report'] = 'Report';
+
+            uiStrings['DE']['was_this_helfull'] = 'War das hilfreich?';
+            uiStrings['DE']['yes_this_was_helpful'] = 'Ja, das war hilfreich';
+            uiStrings['DE']['i_regret_marking_this_this_as_helpful'] = 'Ich bedaure diese Kennzeichnung als hilfreich';
+            uiStrings['DE']['no_this_wasnt_helpful'] = 'Nein, das hat mir nicht geholfen';
+            uiStrings['DE']['i_regret_marking_this_as_not_helpful'] = 'Ich bedauere diese Kennzeichnung nicht geholfen';
+            uiStrings['DE']['yes'] = 'Ja';
+            uiStrings['DE']['no'] = 'Nein';
+            uiStrings['DE']['report'] = 'Melden';
+
+            var origin = getURLParameter('origin');
+            var height = getURLParameter('_h');
+            var width = getURLParameter('_w');
+            var videoId = getURLParameter('_vid');
+			var allVideoIds = getURLParameter('_vidKeys');
+            var mediaId = getURLParameter('_mid');
+            var mediaSourceId = 100; //getURLParameter('_msid');
+            var mediaSourceKey = videoId; //getURLParameter('_msk');
+            var prodIndex = getURLParameter('_pi');
+            var productId = getURLParameter('_pid');
+            var commandBar = getURLParameter('_cb');
+            var disclaimerIndex = getURLParameter('_di') || 0;
+            var uiLocale = getURLParameter('_ui') || 'EN';
+            var autoPlay = getURLParameter('_ap') || '0';
+            var isPrivateMedia = getURLParameter('_ipm') === "true";
+            var isSponsoredMedia = getURLParameter('_ism') === "true";
+            var isOwnerPage = getURLParameter('_iop') === "true";
+            var isSposoredMedia = getURLParameter('_ism') === "true";
+            // 2. This code loads the IFrame Player API code asynchronously.
+            var tag = document.createElement('script');
+
+            tag.src = "https://www.youtube.com/iframe_api";
+            var firstScriptTag = document.getElementsByTagName('script')[0];
+            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+            // 3. This function creates an <iframe> (and YouTube player)
+            //    after the API code downloads.
+            var player;
+            function onYouTubeIframeAPIReady() {
+                player = new YT.Player('player', {
+                    height: height,
+                    width: width,
+                    playerVars: {
+                        rel: 0,
+                        iv_load_policy: 3,
+                        controls: 2,
+                        showinfo: 1,
+                        ps: "docs"
+                    },
+                    videoId: videoId,
+                    events: {
+                        'onReady': onPlayerReady,
+                        'onStateChange': onPlayerStateChange
+                    }
+                });
+            }
+
+            // 4. The API will call this function when the video player is ready.
+            function onPlayerReady(event) {
+                if (autoPlay === '1') {
+                    event.target.playVideo();
+                }
+                (function( $ ) {
+                    if (commandBar === '1') {
+                        $(".commandBar").width(width).show();
+                    }
+                    $("#socialCaption").html(uiStrings[uiLocale]['was_this_helfull']);
+                    $("#webyclipLike").attr("title",uiStrings[uiLocale]['yes_this_was_helpful']).html('<img src="upvote-small.png">' + uiStrings[uiLocale]['yes']);
+                    $("#webyclipRevertLike").attr("title",uiStrings[uiLocale]['i_regret_marking_this_this_as_helpful']).html('<img src="upvoted-small.png">' + uiStrings[uiLocale]['yes']);
+                    $("#webyclipDislike").attr("title",uiStrings[uiLocale]['no_this_wasnt_helpful']).html('<img src="downvote-small.png">' + uiStrings[uiLocale]['no']);
+                    $("#webyclipRevertDislike").attr("title",uiStrings[uiLocale]['i_regret_marking_this_as_not_helpful']).html('<img src="downvoted-small.png">' + uiStrings[uiLocale]['no']);
+                    if (!isPrivateMedia) {
+                        $("#webyclipDisclaimer").width(width).html(disclaimers[uiLocale][disclaimerIndex]);
+                    }
+                    $("#webyclipReportAbuseLink").html('<img src="flag-gray.png">' + uiStrings[uiLocale]['report'] );
+                    $(".social").removeClass("mediaLiked").removeClass("mediaDisliked");
+                    var value = $.cookie('webyclip_s_' + productId + ':' + mediaId);
+                    if (value == 'like') {
+                        $(".social").addClass('mediaLiked');
+                    }
+                    else if (value == 'dislike') {
+                        $(".social").addClass('mediaDisliked');
+                    }
+                    $("#webyclipLike").click(function() {
+                        $(".social").removeClass('mediaDisliked').addClass('mediaLiked');
+                        var previousState = $.cookie('webyclip_s_' + productId + ':'  + mediaId);
+                        $.cookie('webyclip_s_' + productId + ':'  + mediaId, 'like', { expires: 365*5, path: '/', domain: 'webyclip.com' } );
+                        if (previousState == null) {
+                            previousState ='';
+                        }
+                        if (previousState == '' || previousState == 'dislike') {
+                            postMessageToParent('{"name":"Social", "socialAction":"like", "previousState":"' + previousState + '", "prodIndex":' + prodIndex + ',"mediaId":"' + mediaId + '","sourceId":100, "sourceKey":"' + videoId + '"}');
+							postMessageToParent('{"name":"MediaLikeAdded", "prodIndex":' + prodIndex + ',"mediaId":"' + mediaId + '", "mediaSourceId":"' + mediaSourceId + '", "mediaSourceKey":"' + mediaSourceKey + '", "embedded":true}');
+                        }
+                    });
+                    $("#webyclipRevertLike").click(function() {
+                        $(".social").removeClass('mediaLiked');
+                        $.removeCookie('webyclip_s_' + productId + ':' + mediaId, { path: '/', domain: 'webyclip.com' });
+                        postMessageToParent('{"name":"Social", "socialAction":"revertLike", "previousState":"", "prodIndex":' + prodIndex + ',"mediaId":"' + mediaId + '","sourceId":100, "sourceKey":"' + videoId + '"}');
+						postMessageToParent('{"name":"MediaLikeRemoved", "prodIndex":' + prodIndex + ', "mediaId":"' + mediaId + '", "mediaSourceId":"' + mediaSourceId + '", "mediaSourceKey":"' + mediaSourceKey + '", "embedded":true}');
+                    });
+                    $("#webyclipDislike").click(function() {
+                        $(".social").removeClass('mediaLiked').addClass('mediaDisliked');
+                        var previousState = $.cookie('webyclip_s_' + productId + ':'  + mediaId);
+                        $.cookie('webyclip_s_' + productId + ':'  + mediaId, 'dislike', { expires: 365*5, path: '/', domain: 'webyclip.com' } );
+                        if (previousState == null) {
+                            previousState ='';
+                        }
+                        if (previousState == '' || previousState == 'like') {
+                            postMessageToParent('{"name":"Social", "socialAction":"dislike", "previousState":"' + previousState + '", "prodIndex":' + prodIndex + ',"mediaId":"' + mediaId + '","sourceId":100, "sourceKey":"' + videoId + '"}');
+							postMessageToParent('{"name":"MediaDislikeAdded", "prodIndex":' + prodIndex + ', "mediaId":"' + mediaId + '", "mediaSourceId":"' + mediaSourceId + '", "mediaSourceKey":"' + mediaSourceKey + '", "embedded":true}');
+                        }
+                    });
+                    $("#webyclipRevertDislike").click(function() {
+                        $(".social").removeClass('mediaDisliked');
+                        $.removeCookie('webyclip_s_' + productId + ':' + mediaId, { path: '/', domain: 'webyclip.com' });
+                        postMessageToParent('{"name":"Social", "socialAction":"revertDislike", "previousState":"", "prodIndex":' + prodIndex + ',"mediaId":"' + mediaId + '","sourceId":100, "sourceKey":"' + videoId + '"}');
+						postMessageToParent('{"name":"MediaDislikeRemoved", "prodIndex":' + prodIndex + ', "mediaId":"' + mediaId + '", "mediaSourceId":"' + mediaSourceId + '", "mediaSourceKey":"' + mediaSourceKey + '", "embedded":true}');
+                    });
+                    $("#webyclipReportAbuseLink").click(function() {
+                        postMessageToParent('{"name":"ReportAbuse", "prodIndex":' + prodIndex + ',"mediaId":"' + mediaId + '", "mediaSourceId":"' + mediaSourceId + '", "mediaSourceKey":"' + mediaSourceKey + '"}');
+                    });
+                    if (isPrivateMedia) {
+                        $("#privateMediaImage").css("margin-left", width / 2 - 90);
+                        $("#privateMediaImage").addClass("isPrivate");
+                    }
+                    $(".excludeMediaImg").click(function() {
+                        postMessageToParent('{"name":"RemoveMedia", "prodIndex":' + prodIndex + ',"mediaId":"' + mediaId + '"}');
+                    });
+                })(jQuery);
+            }
+
+            var playedReported = false;
+            // 5. The API calls this function when the player's state changes.
+            //    The function indicates that when playing a video (state=1),
+            //    the player should play for six seconds and then stop.
+            var start = false;
+            var startDate = null;
+            var lastTempStart = null;
+            var endDate = null;
+            var playing = false;
+            var netPlayDuration = 0;
+            var counting = false;
+            function onPlayerStateChange(event) {
+                if (event.data == YT.PlayerState.PLAYING) {
+                    playing = true;
+                    counting = false;
+                    if (!playedReported) {
+                        postMessageToParent('{"name":"EmbeddedPlayClick","prodIndex":' + prodIndex + ',"mediaId":"' + mediaId + '", "mediaSourceId":"' + mediaSourceId + '", "mediaSourceKey":"' + mediaSourceKey + '"}');
+                        playedReported = true;
+                    }
+                    if (!start) {
+                        start = true;
+                        startDate = new Date();
+                        lastTempStart = startDate;
+                        console.log('PLAYING - Start');
+                    }
+                    else {
+                        lastTempStart = new Date();
+                        console.log('PLAYING - Continue');
+                        //continue playing...
+                    }
+                }
+                else if (event.data == YT.PlayerState.PAUSED) {
+                    if (playing) {
+                        netPlayDuration += (new Date()).getTime()-lastTempStart.getTime();
+                        counting = true;
+                        setTimeout(function() {
+                            if (counting) {
+                                counting = false;
+                                postMessageToParent('{"name":"EmbeddedPlayDuration","prodIndex":' + prodIndex + ',"mediaId":"' + mediaId + '", "mediaSourceId":"' + mediaSourceId + '", "mediaSourceKey":"' + mediaSourceKey + '","value":' + netPlayDuration + '}');
+                                playing = false;
+                                start = false;
+                                startDate = null;
+                                lastTempStart = null;
+                                endDate = null;
+                                netPlayDuration = 0;
+                            }
+                        },5000);
+                    }
+                    console.log('PAUSED - current duration is ' + netPlayDuration);
+                    playing = false;
+                }
+                else if (event.data == YT.PlayerState.ENDED) {
+                    counting = false;
+                    endDate = new Date();
+                    if (playing) {
+                        netPlayDuration += (new Date()).getTime()-lastTempStart.getTime();
+                    }
+                    console.log('ENDED - duration is ' + netPlayDuration);
+
+                    //post message here with netPlayDuration
+                    postMessageToParent('{"name":"EmbeddedPlayDuration","prodIndex":' + prodIndex + ',"mediaId":"' + mediaId + '", "mediaSourceId":"' + mediaSourceId + '", "mediaSourceKey":"' + mediaSourceKey + '","sponsoredMedia":' + ((isSposoredMedia)? 'true' : 'false') + ',"value":' + netPlayDuration + '}');
+
+                    playing = false;
+                    start = false;
+                    startDate = null;
+                    lastTempStart = null;
+                    endDate = null;
+                    netPlayDuration = 0;
+                }
+            }
+            if (isOwnerPage && (!isSponsoredMedia)) {
+                $("#excludeMediaSpan").show();
+            } else {
+                $("#excludeMediaSpan").hide();
+            }
+        </script>
+    
+
+</body></html>

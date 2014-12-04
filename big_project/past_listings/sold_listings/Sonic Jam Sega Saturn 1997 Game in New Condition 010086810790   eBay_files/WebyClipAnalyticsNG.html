@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<!-- saved from url=(0437)https://6bf746ad5bc91a240a3d-1d8fbdf7ecdc2b67730d7c561f0d1dfd.ssl.cf2.rackcdn.com/WebyClipAnalyticsNG.html?v=14&origin=http://www.ebay.com&ref=http%3A%2F%2Fwww.ebay.com%2Fitm%2FSonic-Jam-Sega-Saturn-1997-Game-In-New-Condition-%2F131269243319%3Fpt%3DVideo_Games_Games%26hash%3Ditem1e9041b1b7&siteKey=512f7ba25c0f3&siteId=94&prodId=5294aed0e8ea7de413000024&p1=Video%20Games%20US&p2=US&p3=4542&p4=Sonic%20Jam%20Sega%20Saturn&p5=131269243319 -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+        <title></title>
+        <script src="jquery.min.js"></script>
+        <script type="text/javascript">
+            $(function() {
+                var getURLParameter = function(name) {
+                    return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [, ""])[1].replace(/\+/g, '%20')) || null;
+                };
+                var uuid = function() {
+                    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                        var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+                        return v.toString(16);
+                    });
+                };
+                (function($, document, undefined) {
+                    var pluses = /\+/g;
+                    function raw(s) {
+                        return s;
+                    }
+                    function decoded(s) {
+                        return decodeURIComponent(s.replace(pluses, ' '));
+                    }
+                    var config = $.cookie = function(key, value, options) {
+                        // write
+                        if (value !== undefined) {
+                            options = $.extend({}, config.defaults, options);
+                            if (value === null) {
+                                options.expires = -1;
+                            }
+                            if (typeof options.expires === 'number') {
+                                var days = options.expires, t = options.expires = new Date();
+                                t.setDate(t.getDate() + days);
+                            }
+                            value = config.json ? JSON.stringify(value) : String(value);
+                            return (document.cookie = [
+                                encodeURIComponent(key), '=', config.raw ? value : encodeURIComponent(value),
+                                options.expires ? '; expires=' + options.expires.toUTCString() : '', // use expires attribute, max-age is not supported by IE
+                                options.path ? '; path=' + options.path : '',
+                                options.domain ? '; domain=' + options.domain : '',
+                                options.secure ? '; secure' : ''
+                            ].join(''));
+                        }
+                        // read
+                        var decode = config.raw ? raw : decoded;
+                        var cookies = document.cookie.split('; ');
+                        for (var i = 0, l = cookies.length; i < l; i++) {
+                            var parts = cookies[i].split('=');
+                            if (decode(parts.shift()) === key) {
+                                var cookie = decode(parts.join('='));
+                                return config.json ? JSON.parse(cookie) : cookie;
+                            }
+                        }
+                        return null;
+                    };
+                    config.defaults = {};
+                    $.removeCookie = function(key, options) {
+                        if ($.cookie(key) !== null) {
+                            $.cookie(key, null, options);
+                            return true;
+                        }
+                        return false;
+                    };
+                })(jQuery, document);
+                var ref = getURLParameter('ref');
+                var referrer = document.referrer;
+                var origin = getURLParameter('origin');
+                var siteKey = getURLParameter('siteKey');
+                var siteId = getURLParameter('siteId');
+                var prodId = getURLParameter('prodId');
+                var visitorId = $.cookie('wc_vid');
+                if (visitorId === null || typeof (visitorId) === "undefined") {
+                    visitorId = uuid();
+                    $.cookie('wc_vid', visitorId, {expires: 365 * 10, path: '/'});
+                }
+                var visitorIdFromCookie = $.cookie('wc_vid');
+                var okToRun = true;
+                var lastInteractionId = $.cookie('wc_last_iid');
+                var interactionId = uuid();
+                if (visitorId !== visitorIdFromCookie || (lastInteractionId !== null && typeof (lastInteractionId) !== "undefined" && lastInteractionId === interactionId)) {
+                    okToRun = false;
+                }
+                $.cookie('wc_last_iid', interactionId, {expires: 365 * 10, path: '/'});
+                var p1 = getURLParameter('p1');
+                var p2 = getURLParameter('p2');
+                var p3 = getURLParameter('p3');
+                var p4 = getURLParameter('p4');
+                var p5 = getURLParameter('p5');
+                var p6 = getURLParameter('p6');
+                var p7 = getURLParameter('p7');
+                var p8 = getURLParameter('p8');
+                var p9 = getURLParameter('p9');
+                var p10 = getURLParameter('p10');
+
+                var stopSent = false;
+                var userLoggedIn = false;
+                var cdnUsed = false;
+                var hasLinkToShow = false;
+                var showThumbnails = false;
+                var thumbnailsCount = 0;
+                var forceStopped = false;
+                var isABTesting = false;
+                var ABGroup = null;
+                var startDate = new Date().getTime();
+                var gotInitialMetadata = false;
+
+                var pdCount = 0;
+                var spdCount = 0;
+                var lcCount = 0;
+                var mlCount = 0;
+                var mdCount = 0;
+                var rCount = 0;
+                var cfaCount = 0;
+                var fsCount = 0;
+                var ffShare = 0;
+
+                var updateCounters = function(messageObj) {
+                    switch(messageObj.eventName) {
+                        case "playDuration":
+                        case "playEmbeddedDuration":
+                            pdCount += parseInt(messageObj.eventData.duration);
+                            spdCount += ((typeof(messageObj.eventData.sponsoredMedia) != "undefined" && messageObj.eventData.sponsoredMedia)? parseInt(messageObj.eventData.duration) : 0);
+                            break;
+                        case "LinkClicked":
+                        case "EmbeddedLinkClicked":
+                            lcCount++;
+                            break;
+                        case "MediaLikeAdded":
+                            mlCount++;
+                            break;
+                        case "MediaLikeRemoved":
+                            mlCount--;
+                            break;
+                        case "MediaDislikeAdded":
+                            mdCount++;
+                            break;
+                        case "MediaDislikeRemoved":
+                            mdCount--;
+                            break;
+                        case "reportAbuse":
+                            rCount++;
+                            break;
+                        case "CFA":
+                            cfaCount++;
+                            break;
+                        case "FBShare":
+                            fsCount++;
+                            break;
+                        case "FBFromShare":
+                            ffShare++;
+                            break;
+                    }
+                };
+                
+                var listener = function(event) {
+                    if (event.originalEvent.origin !== origin)
+                        return;
+
+                    var messageObj = $.parseJSON(event.originalEvent.data) || {};
+                    if (typeof (messageObj.messageType) !== 'undefined') {
+                        if ((messageObj.messageType === 'event') && (typeof (messageObj.eventName) !== 'undefined') && (typeof (messageObj.eventData) !== 'undefined')) {
+                            updateCounters(messageObj);
+                            reportData(messageObj.eventName, messageObj.eventData, messageObj.eventName !== "CFA");
+                        } else if (messageObj.messageType === 'metadata') {
+                            userLoggedIn = messageObj.userLoggedIn;
+                            cdnUsed = messageObj.cdnUsed;
+                            hasLinkToShow = messageObj.hasLinkToShow;
+                            showThumbnails = messageObj.showThumbnails;
+                            thumbnailsCount = messageObj.thumbnailsCount;
+                            isABTesting = messageObj.isABTesting;
+                            ABGroup = messageObj.ABGroup;
+
+                            if (!gotInitialMetadata) {
+                                startTimeEventProcess();
+                                gotInitialMetadata = true;
+                            }
+                        }
+                    }
+                };
+
+                var startTimeEventProcess = function() {
+                    reportData('START', {}, true);
+                    $(window).on('beforeunload', function() {
+                        if (!stopSent) {
+                            if (!forceStopped) {
+                                reportData('STOP', { }, false);
+                                stopSent = true;
+                            }
+                        }
+                    });
+                };
+
+                var __protocol = 'http';
+                if (location.protocol.toLowerCase() === 'https:') {
+                    __protocol = 'https';
+                }
+                var __urlBase = __protocol + '://' + ((__protocol === 'http') ? 'analytics.webyclip.com' : '0cade0655bc026201a9a-d95b928c91b5835e9ef14723f2350a83.ssl.cf2.rackcdn.com');
+
+                var encodeIf = function(name, val) {
+                    if (typeof val !== 'undefined' && val !== null) {
+                        return '&' + name + '=' + encodeURIComponent(val).replace("'", "%27");
+                    }
+                    return '';
+                };
+                var debug = function(msg) {
+                    try {
+                        console.debug(msg);
+                    }
+                    catch (err) {
+                    }
+                };
+                var reportData = function(eventName, addtionalInfo, aSync) {
+                    var __url = __urlBase + '/__wc.gif?_en=' + eventName +
+                            encodeIf('_ts', ((new Date().getTime()) - startDate)) +
+                            encodeIf('_sk', siteKey) +
+                            encodeIf('_sid', siteId) +
+                            encodeIf('_vid', visitorId) +
+                            encodeIf('_iid', interactionId) +
+                            encodeIf('_pid', prodId) +
+                            encodeIf('_rnd', Math.floor((Math.random() * 10000) + 1));
+
+                    var eventInfo = {
+                        'userLoggedIn': userLoggedIn,
+                        'cdnUsed': cdnUsed,
+                        'hasLinkToShow': hasLinkToShow,
+                        'showThumbnails': showThumbnails,
+                        'thumbnailsCount': thumbnailsCount,
+                        'isABTesting': isABTesting,
+                        'ABGroup': ABGroup
+                    };
+
+                    $.extend(eventInfo,{
+                        'pdCount': pdCount,
+                        'spdCount': spdCount,
+                        'lcCount': lcCount,
+                        'mlCount': mlCount,
+                        'mdCount': mdCount,
+                        'rCount': rCount,
+                        'cfaCount': cfaCount,
+                        'fsCount': fsCount,
+                        'ffShare': ffShare
+                    });
+                    $.extend(eventInfo, addtionalInfo);
+
+                    $.extend(eventInfo, {
+                        'ref': ref,
+                        'referrer': referrer,
+                        'p1': p1,
+                        'p2': p2,
+                        'p3': p3,
+                        'p4': p4,
+                        'p5': p5,
+                        'p6': p6,
+                        'p7': p7,
+                        'p8': p8,
+                        'p9': p9,
+                        'p10': p10
+                    });
+
+                    for (var key in eventInfo) {
+                        if (eventInfo.hasOwnProperty(key)) {
+                            __url += encodeIf(key, eventInfo[key]);
+                        }
+                    }
+                    doReportData(__url, aSync, (eventName === 'START'));
+
+                };
+                var doReportData = function(url, aSync, check) {
+                    var pendingUrlsArr = [];
+                    var pendingUrls = $.cookie('wc_anlytics_pending_arr');
+                    if (pendingUrls != null) {
+                        pendingUrlsArr = $.parseJSON(pendingUrls);
+                    }
+                    if (check) {
+                        $.each(pendingUrlsArr, function(idx, val) {
+                            doReportData(val, false, false);
+                        });
+                    }
+                    if (!aSync) {
+                        pendingUrlsArr.push(url);
+                        pendingUrls = JSON.stringify(pendingUrlsArr);
+                        $.cookie('wc_anlytics_pending_arr', pendingUrls, {expires: 30, path: '/'});
+                    }
+                    $.ajax({
+                        url: url,
+                        success: function() {
+                            if (!aSync) {
+                                pendingUrls = $.cookie('wc_anlytics_pending_arr');
+                                if (pendingUrls != null) {
+                                    pendingUrlsArr = $.parseJSON(pendingUrls);
+                                }
+                                var index = pendingUrlsArr.indexOf(url);
+                                if (index > -1) {
+                                    pendingUrlsArr.splice(index, 1);
+                                }
+                                pendingUrls = JSON.stringify(pendingUrlsArr);
+                                $.cookie('wc_anlytics_pending_arr', pendingUrls, {expires: 30, path: '/'});
+                            }
+                            debug(url);
+                        },
+                        async: aSync
+                    });
+                };
+
+                if (okToRun) {
+                    $(window).on('message', listener);
+                    //force STOP after 1 hour
+                    setTimeout(function() {
+                        forceStopped = true;
+                        if (!stopSent) {
+                            reportData('STOP', { }, false);
+                            stopSent = true;
+                        }
+                    }, 60 * 60 * 1000);
+                }
+            });
+        </script>
+    </head>
+    <body>
+    
+</body></html>

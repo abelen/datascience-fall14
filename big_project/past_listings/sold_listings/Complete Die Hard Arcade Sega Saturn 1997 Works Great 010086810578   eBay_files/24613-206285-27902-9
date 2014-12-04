@@ -1,0 +1,175 @@
+  (function mojoProtocol() {
+		 var regexx = /\d+-\d+-\d+-\d+/;
+		 var theMpck = "adfarm.mediaplex.com/ad/ck/24613-206285-27902-9?mpt=1415526474&mpcr=41374935&mpcrset=root";
+		 var myplid = regexx.test(theMpck) ? theMpck.match(/\d+-\d+-\d+-\d+/) : null;
+		 var myURL = "";
+		 try{
+			if (myplid != null) {
+				var tags = window.document.getElementsByTagName("script");
+				for (var i=0; i < tags.length; i++) {
+					if (tags.item(i).src){
+					  if (tags.item(i).src.match(myplid)) {
+						myURL = tags.item(i).src;  
+					  }
+					}
+				}
+				window.mojoProto = myURL.substring(0,6);
+			} else {
+			  window.mojoProto = "http:";	
+			}
+			
+		 } catch (e) {
+			 window.mojoProto = "http:";
+		 }		
+                 if (window.mojoProto == "" || window.mojoProto == null) window.mojoProto = window.location.protocol;
+
+
+	})();
+	var mojopro = window.mojoProto;
+	if (mojopro == "https:") {
+		mojopro = "https://secure.img-cdn.mediaplex.com/0/";
+	}	else  {
+		mojopro = "https://secure.img-cdn.mediaplex.com/0/";
+  	};  
+
+
+var mojosrc = mojopro + "documentwrite.js";
+var jssrc = '<scr' + 'ipt type="text/javascript" src="' + mojosrc + '"></scr' + 'ipt>';
+if( window.DocumentWrite ){
+    DocumentWrite( jssrc );
+}
+  else {
+    document.write( jssrc );
+};
+//-->
+ 
+(function(){ 
+var mpvce = '<mpvce/>';
+if (mpvce == 1) {
+mpvclick = encodeURIComponent("http://nym1.ib.adnxs.com/click?d76fGi_d-D93vp8aL934PwAAAAAAACRACuyRMnnf-D8K7JEyed_4P62S1qqtZA1kbfe5116oYWVKOF9UAAAAAKmIHwC1AAAAiQkAAAIAAABpUTcB0WMAAAAAAQBVU0QAVVNEANgCWgBDvwAATqkDAQUAAQAAAAAAXCUYCAAAAAA./cnd=%21rAZlPwif1dsCEOmi3QkY0ccBIAA./referrer=http%3A%2F%2Fwww.ebay.com%2F/clickenc=");
+mpvc = mpvclick;
+}
+else if (mpvce == 2) {
+mpvclick2 = encodeURIComponent("http://nym1.ib.adnxs.com/click?d76fGi_d-D93vp8aL934PwAAAAAAACRACuyRMnnf-D8K7JEyed_4P62S1qqtZA1kbfe5116oYWVKOF9UAAAAAKmIHwC1AAAAiQkAAAIAAABpUTcB0WMAAAAAAQBVU0QAVVNEANgCWgBDvwAATqkDAQUAAQAAAAAAXCUYCAAAAAA./cnd=%21rAZlPwif1dsCEOmi3QkY0ccBIAA./referrer=http%3A%2F%2Fwww.ebay.com%2F/clickenc=");
+mpvc = encodeURIComponent(mpvclick2);
+}
+else
+  {
+mpvc = ("http%3A%2F%2Fnym1.ib.adnxs.com%2Fclick%3Fd76fGi_d-D93vp8aL934PwAAAAAAACRACuyRMnnf-D8K7JEyed_4P62S1qqtZA1kbfe5116oYWVKOF9UAAAAAKmIHwC1AAAAiQkAAAIAAABpUTcB0WMAAAAAAQBVU0QAVVNEANgCWgBDvwAATqkDAQUAAQAAAAAAXCUYCAAAAAA.%2Fcnd%3D%2521rAZlPwif1dsCEOmi3QkY0ccBIAA.%2Freferrer%3Dhttp%253A%252F%252Fwww.ebay.com%252F%2Fclickenc%3D");
+  }; 
+var mpcke = '<mpcke/>';
+if (mpcke == 1) {
+mpcclick = encodeURIComponent("adfarm.mediaplex.com%2Fad%2Fck%2F24613-206285-27902-9%3Fmpt%3D1415526474%26mpcr%3D41374935%26mpcrset%3Droot");
+mpck = "http://" + mpcclick;
+}
+else if (mpcke == 2) {
+mpcclick2 = encodeURIComponent("adfarm.mediaplex.com%2Fad%2Fck%2F24613-206285-27902-9%3Fmpt%3D1415526474%26mpcr%3D41374935%26mpcrset%3Droot");
+mpck = "http://" + encodeURIComponent(mpcclick2);
+}
+else
+  {
+mpck = ("http://adfarm.mediaplex.com%2Fad%2Fck%2F24613-206285-27902-9%3Fmpt%3D1415526474%26mpcr%3D41374935%26mpcrset%3Droot");
+  };
+var mp_swver = 0, mp_html = "";
+if( navigator.mimeTypes && navigator.mimeTypes["application/x-shockwave-flash"] && navigator.mimeTypes["application/x-shockwave-flash"].enabledPlugin ) {
+  if( navigator.plugins && navigator.plugins["Shockwave Flash"] ) {
+    mp_swver = (navigator.plugins["Shockwave Flash"].description.split( " " ))[2];
+  }
+} else if ( navigator.userAgent && navigator.userAgent.indexOf("MSIE") >= 0 && ( navigator.userAgent.indexOf("Windows") >= 0 ) ) {
+var mp_axo,e;
+  for( var mp_i = 11; mp_i > 6; mp_i-- ) {
+    try {
+    mp_axo = new ActiveXObject("ShockwaveFlash.ShockwaveFlash." + mp_i );
+    mp_swver = mp_i;
+    break;
+    } catch (e) {}
+  }
+}
+if( mp_swver >= 6 ) {
+  mp_html =  '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" ';
+  mp_html += ' codebase="https://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0" id="41374935" name="movie41374935" width="728" height="90">';
+  if( mp_swver > 5 ) {
+    mp_html += '<param name="FlashVars" value="clickTAG=' + mpvc + mpck +'&clickTag=' + mpvc + mpck + '&clickTag1=' + mpvc + mpck + '">';
+    mp_html += '<param name="movie" value="' + mojopro + '24613/206285/2014_Q4_Tempur-Pedic_preBF_728x90.swf">';
+    mp_html += '<param name="wmode" value="opaque">';
+    mp_html += '<param name="allowscriptaccess" value="always">';
+  } 
+  else {
+    mp_html += '<param name="movie" value="' + mojopro + '24613/206285/2014_Q4_Tempur-Pedic_preBF_728x90.swf?clickTAG=' + mpvc + mpck +'&clickTag=' + mpvc + mpck + '&clickTag1=' + mpvc + mpck + '">';
+    mp_html += '<param name="wmode" value="opaque">';
+    mp_html += '<param name="allowscriptaccess" value="always">';
+  }
+  if( mp_swver > 5 ) {
+    mp_html += '<embed wmode="opaque" allowscriptaccess="always" name="24613/206285/2014_Q4_Tempur-Pedic_preBF_728x90." src="' + mojopro + '24613/206285/2014_Q4_Tempur-Pedic_preBF_728x90.swf" FlashVars="clickTAG=' + mpvc + mpck  +'&clickTag=' + mpvc + mpck  +'&clickTag1=' + mpvc + mpck  + '"';
+  }
+  else {
+    mp_html += '<embed wmode="opaque" allowscriptaccess="always" NAME="24613/206285/2014_Q4_Tempur-Pedic_preBF_728x90." src="' + mojopro + '24613/206285/2014_Q4_Tempur-Pedic_preBF_728x90.swf?clickTAG=' + mpvc + mpck  +'&clickTag=' + mpvc + mpck  +'&clickTag1=' + mpvc + mpck  + '"';
+  }
+  mp_html += ' swLiveConnect="false" width="728" height="90" type="application/x-shockwave-flash" pluginspage="">';
+  mp_html += '</embed>';
+  mp_html += '</object>';
+  if( window.DocumentWrite )
+    DocumentWrite( mp_html );
+  else
+    document.write( mp_html );
+} else {
+  document.write('<a href="http://nym1.ib.adnxs.com/click?d76fGi_d-D93vp8aL934PwAAAAAAACRACuyRMnnf-D8K7JEyed_4P62S1qqtZA1kbfe5116oYWVKOF9UAAAAAKmIHwC1AAAAiQkAAAIAAABpUTcB0WMAAAAAAQBVU0QAVVNEANgCWgBDvwAATqkDAQUAAQAAAAAAXCUYCAAAAAA./cnd=%21rAZlPwif1dsCEOmi3QkY0ccBIAA./referrer=http%3A%2F%2Fwww.ebay.com%2F/clickenc=http://adfarm.mediaplex.com/ad/ck/24613-206285-27902-9?mpt=1415526474&mpcr=41374935&mpcrset=root" target="_blank"><img src="https://secure.img-cdn.mediaplex.com/0/24613/206285/2014_Q4_Tempur-Pedic_preBF_728x90.jpg" width="728" height="90" border="0" alt=""></a>');
+}
+//No Match Data Capture - from swf filename
+var swf_filename ="24613/206285/2014_Q4_Tempur-Pedic_preBF_728x90.swf".toLowerCase(); 
+var swf_segment = swf_filename.split("_");
+var mp_btdata ="<value/>";
+var client_id = swf_filename.substring(0);
+var client_id = client_id.substring(0, client_id.indexOf("/"));
+var char1 = mp_btdata.substring(0,1);
+var char2 = mp_btdata.substring(1,2);
+var char3 = mp_btdata.substring(2,3);
+var char4 = mp_btdata.substring(3,4);
+if (client_id == "2397") { dhs_client_id = "0" , bsd_client_id = "1" } //UK
+if (client_id == "12309") { dhs_client_id = "2" , bsd_client_id = "3" , soho_client_id = "38" , mpp_client_id = "39" , ple_client_id = "40"} //US
+if (client_id == "2400") { dhs_client_id = "4" , bsd_client_id = "5" } //AT
+if (client_id == "2406") { dhs_client_id = "6" , bsd_client_id = "7" } //BE
+if (client_id == "2408") { dhs_client_id = "8" , bsd_client_id = "9" } //DK
+if (client_id == "2402") { dhs_client_id = "10" , bsd_client_id = "11" } //FR
+if (client_id == "2399") { dhs_client_id = "12" , bsd_client_id = "13" } //DE
+if (client_id == "2398") { dhs_client_id = "14" , bsd_client_id = "15" } //IE
+if (client_id == "2403") { dhs_client_id = "16" , bsd_client_id = "17" } //IT
+if (client_id == "2405") { dhs_client_id = "18" , bsd_client_id = "19" } //NL
+if (client_id == "2409") { dhs_client_id = "20" , bsd_client_id = "21" } //NO
+if (client_id == "8080") { dhs_client_id = "22" , bsd_client_id = "23" } //PL
+if (client_id == "2404") { dhs_client_id = "24" , bsd_client_id = "25" } //ES
+if (client_id == "2407") { dhs_client_id = "26" , bsd_client_id = "27" } //SE
+if (client_id == "2401") { dhs_client_id = "28" , bsd_client_id = "29" } //CH
+if (client_id == "12255") { dhs_client_id = "30" , bsd_client_id = "31" } //BR
+if (client_id == "12308") { dhs_client_id = "32" , bsd_client_id = "33" } //CA
+if (client_id == "12271") { dhs_client_id = "34" , bsd_client_id = "35" } //MX
+if (client_id == "10589") { dhs_client_id = "36" , bsd_client_id = "37" } //AU
+if (client_id == "10592") { dhs_client_id = "41" , bsd_client_id = "42" } //CN
+
+var nm_client_id = false;
+if (mp_btdata != "" && mp_btdata.indexOf("value") != 1) {
+  for (var i = 1, j = 3; i <= j; i++) {
+    if (swf_segment[i].indexOf("co") != -1) {
+      nm_client_id = dhs_client_id;
+    } else if (swf_segment[i].indexOf("so") != -1 || swf_segment[i].indexOf("sb") != -1 || swf_segment[i].indexOf("smb") != -1 || swf_segment[i].indexOf("sm") != -1 || swf_segment[i].indexOf("bu") != -1) {
+      nm_client_id = bsd_client_id;
+    } else if (swf_segment[i].indexOf("mpp") != -1) {
+      nm_client_id = mpp_client_id;
+    } else if (swf_segment[i].indexOf("ple") != -1) {
+      nm_client_id = ple_client_id;
+    }
+
+    if (nm_client_id !== false) {
+      document.write("<img src=" + window.location.protocol +  "//altfarm.mediaplex.com/ad/tr/18628-131383-3840-" + nm_client_id + "?value=" + mp_btdata + " border=0/>");
+      break;
+    }
+  }
+}
+//Dell Flash - No Match Data Capture (Filename)
+
+}
+)();
+//-->
+
+document.write( "<script type=\"text/javascript\" src=\"https://cdn.doubleverify.com/dvtp_src.js?ctx=2333641&cmp=2386095&sid=24613206285279029&plc=24613206285279029&num=&adid=&advid=2333642&adsrv=8&region=30&btreg=24613206285279029&btadsrv=mediaplex&crt=41374935&crtname=&chnl=&unit=&pid=&uid=&dvtagver=6.1.src\"><"+"/script>");
+

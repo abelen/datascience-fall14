@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<!-- saved from url=(0116)https://6bf746ad5bc91a240a3d-1d8fbdf7ecdc2b67730d7c561f0d1dfd.ssl.cf2.rackcdn.com/il.html?origin=http://www.ebay.com -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<script type="text/javascript"> 
+
+	var getURLParameter = function(name) {
+		return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;
+	};
+
+	var origin = getURLParameter('origin');
+	function postMessageToParent(msg) {
+		if (typeof(window.parent) !== 'undefined' && typeof(window.parent.postMessage) !== 'undefined') {
+			window.parent.postMessage(msg, origin);
+		}
+	}
+
+	function getCookie(c_name) {
+		var c_value = document.cookie;
+		var c_start = c_value.indexOf(" " + c_name + "=");
+		if (c_start == -1) {
+			c_start = c_value.indexOf(c_name + "=");
+		}
+		if (c_start == -1) {
+			c_value = null;
+		}
+		else {
+			c_start = c_value.indexOf("=", c_start) + 1;
+			var c_end = c_value.indexOf(";", c_start);
+			if (c_end == -1) {
+				c_end = c_value.length;
+			}
+			c_value = unescape(c_value.substring(c_start,c_end));
+		}
+		return c_value;
+	}
+	function reportStatus() {
+		var c_value = getCookie('webyclip_ulg_ind');
+		var msg = '{ "status": ' + ((c_value === 'true')? 'true' : 'false') + '}';
+		postMessageToParent(msg);
+	}
+	</script>
+</head>
+<body onload="reportStatus();">
+
+</body></html>
